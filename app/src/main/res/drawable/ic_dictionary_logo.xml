@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+
+    <!-- Outer circle -->
+    <path
+        android:fillColor="@color/primary_color"
+        android:pathData="M60,10C32.39,10 10,32.39 10,60C10,87.61 32.39,110 60,110C87.61,110 110,87.61 110,60C110,32.39 87.61,10 60,10M60,20C81.5,20 100,38.5 100,60C100,81.5 81.5,100 60,100C38.5,100 20,81.5 20,60C20,38.5 38.5,20 60,20"/>
+
+    <!-- Book shape -->
+    <path
+        android:fillColor="@color/primary_color"
+        android:pathData="M40,35H80V45H75V75H80V85H40V75H45V45H40V35Z"/>
+
+    <!-- Book pages -->
+    <path
+        android:fillColor="@color/white"
+        android:pathData="M50,40V80H70V40H50Z"/>
+
+</vector>
