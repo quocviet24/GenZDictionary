@@ -11,7 +11,7 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <!-- Header with Back Button and Title -->
+        <!-- Header with Title -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -75,7 +75,44 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:textColor="@color/text_secondary" />
+            android:textColor="@color/text_secondary"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Slang Word ID -->
+        <TextView
+            android:id="@+id/tv_detail_slang_word_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/text_secondary"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Date -->
+        <TextView
+            android:id="@+id/tv_detail_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/text_secondary"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Created At -->
+        <TextView
+            android:id="@+id/tv_detail_created_at"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/text_secondary"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Created By -->
+        <TextView
+            android:id="@+id/tv_detail_created_by"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/text_secondary"
+            android:layout_marginBottom="12dp" />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

@@ -12,4 +12,8 @@
     <string name="menu_slideshow">Slideshow</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="sort_options">
+        <item>Mới nhất</item>
+        <item>Cũ nhất</item>
+    </string-array>
 </resources>
