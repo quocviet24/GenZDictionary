@@ -1,14 +1,13 @@
 package com.nishikatakagi.genzdictionary;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
@@ -18,6 +17,10 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.nishikatakagi.genzdictionary.databinding.ActivityMainBinding;
@@ -27,26 +30,11 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    FirebaseFirestore firestore;
-    private void createData(){
-        firestore = FirebaseFirestore.getInstance();
-        Map<String, Object> slang_words = new HashMap<>();
-        slang_words.put("word", "hello");
-        slang_words.put("meaning", "greeting");
-        firestore.collection("words").add(slang_words).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-                Toast.makeText(MainActivity.this, "Word added", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(MainActivity.this, "Word not added", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+    private SharedPreferences sharedPreferences;
+    private FirebaseFirestore firestore;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // Khởi tạo SharedPreferences
+        sharedPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
 
         setSupportActionBar(binding.appBarMain.toolbar);
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
@@ -64,11 +55,20 @@ public class MainActivity extends AppCompatActivity {
                         .setAnchorView(R.id.fab).show();
             }
         });
-
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+
+        // Cập nhật tiêu đề của navigation header
+        TextView navHeaderTitle = navigationView.getHeaderView(0).findViewById(R.id.nav_header_title);
+        boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
+        String username = sharedPreferences.getString("username", null);
+        if (isLoggedIn && username != null) {
+            navHeaderTitle.setText("Từ điển Gen Z xin chào " + username);
+        } else {
+            navHeaderTitle.setText("Từ điển Gen Z");
+        }
+
+        // Cấu hình navigation
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
                 .setOpenableLayout(drawer)
@@ -76,6 +76,42 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        // Kiểm tra trạng thái đăng nhập để hiển thị menu
+        Menu navMenu = navigationView.getMenu();
+        navMenu.findItem(R.id.nav_login).setVisible(!isLoggedIn);
+        navMenu.findItem(R.id.nav_logout).setVisible(isLoggedIn);
+
+        // Xử lý sự kiện click menu
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                if (id == R.id.nav_login) {
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    drawer.closeDrawers();
+                    return true;
+                } else if (id == R.id.nav_logout) {
+                    // Xử lý đăng xuất
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean("isLoggedIn", false);
+                    editor.remove("email");
+                    editor.remove("username");
+                    editor.apply();
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                    return true;
+                }
+                // Xử lý các mục menu khác
+                boolean handled = NavigationUI.onNavDestinationSelected(item, navController);
+                if (handled) {
+                    drawer.closeDrawers();
+                }
+                return handled || MainActivity.super.onOptionsItemSelected(item);
+            }
+        });
     }
 
     @Override
