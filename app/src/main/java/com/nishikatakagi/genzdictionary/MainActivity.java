@@ -7,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
@@ -17,24 +16,15 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.nishikatakagi.genzdictionary.databinding.ActivityMainBinding;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
     private SharedPreferences sharedPreferences;
-    private FirebaseFirestore firestore;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Cấu hình navigation
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                R.id.nav_home, R.id.list_favorite)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
@@ -81,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         Menu navMenu = navigationView.getMenu();
         navMenu.findItem(R.id.nav_login).setVisible(!isLoggedIn);
         navMenu.findItem(R.id.nav_logout).setVisible(isLoggedIn);
+        navMenu.findItem(R.id.list_favorite).setVisible(isLoggedIn);
 
         // Xử lý sự kiện click menu
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -116,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }

@@ -3,6 +3,7 @@ package com.nishikatakagi.genzdictionary;
 import java.io.Serializable;
 
 public class SlangWord implements Serializable {
+    private String slangWordId;
     private String word;
     private String meaning;
     private String example;
@@ -11,7 +12,8 @@ public class SlangWord implements Serializable {
     // Empty constructor for Firestore
     public SlangWord() {}
 
-    public SlangWord(String word, String meaning, String example, String origin) {
+    public SlangWord(String slangWordId, String word, String meaning, String example, String origin) {
+        this.slangWordId = slangWordId;
         this.word = word;
         this.meaning = meaning;
         this.example = example;
@@ -19,6 +21,14 @@ public class SlangWord implements Serializable {
     }
 
     // Getters and Setters
+    public String getSlangWordId() {
+        return slangWordId;
+    }
+
+    public void setSlangWordId(String slangWordId) {
+        this.slangWordId = slangWordId;
+    }
+
     public String getWord() {
         return word;
     }

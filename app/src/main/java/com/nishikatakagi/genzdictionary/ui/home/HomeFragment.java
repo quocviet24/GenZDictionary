@@ -32,7 +32,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        // Khởi tạo Firestore và RecyclerView
+        // Initialize Firestore and RecyclerView
         firestore = FirebaseFirestore.getInstance();
         rvSlangWords = view.findViewById(R.id.rv_slang_words);
         slangWordList = new ArrayList<>();
@@ -40,7 +40,7 @@ public class HomeFragment extends Fragment {
         rvSlangWords.setLayoutManager(new LinearLayoutManager(getContext()));
         rvSlangWords.setAdapter(adapter);
 
-        // Lấy dữ liệu từ Firestore
+        // Fetch slang words
         fetchSlangWords();
 
         return view;
@@ -56,12 +56,15 @@ public class HomeFragment extends Fragment {
                         if (querySnapshot != null) {
                             for (var doc : querySnapshot) {
                                 SlangWord slangWord = doc.toObject(SlangWord.class);
+                                // Ensure slangWordId is set if not present in document
+                                if (slangWord.getSlangWordId() == null) {
+                                    slangWord.setSlangWordId(doc.getId());
+                                }
                                 slangWordList.add(slangWord);
                             }
                             adapter.updateData(slangWordList);
                         }
                     } else {
-                        // Hiển thị thông báo lỗi
                         Snackbar.make(requireView(), "Lỗi khi tải dữ liệu từ lóng", Snackbar.LENGTH_LONG).show();
                     }
                 });
