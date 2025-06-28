@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.nishikatakagi.genzdictionary" />
+                  <option name="mobileSdkAppId" value="1:325544509237:android:d71ce51c683a3746b7d67c" />
+                  <option name="projectId" value="genzdictionary-nishikatakagi" />
+                  <option name="projectNumber" value="325544509237" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
