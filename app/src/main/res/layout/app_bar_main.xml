@@ -16,6 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
+            android:outlineAmbientShadowColor="#8A5BF4"
             app:popupTheme="@style/Theme.GenZDictionary.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>

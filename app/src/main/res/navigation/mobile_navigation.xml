@@ -22,4 +22,11 @@
         android:name="com.nishikatakagi.genzdictionary.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
+
+    <fragment
+        android:id="@+id/nav_slang_word_detail"
+        android:name="com.nishikatakagi.genzdictionary.ui.home.SlangWordDetailFragment"
+        android:label="Chi tiết từ lóng"
+        tools:layout="@layout/fragment_slang_word_detail" />
+
 </navigation>
