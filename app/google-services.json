@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "325544509237",
+    "project_id": "genzdictionary-nishikatakagi",
+    "storage_bucket": "genzdictionary-nishikatakagi.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:325544509237:android:d71ce51c683a3746b7d67c",
+        "android_client_info": {
+          "package_name": "com.nishikatakagi.genzdictionary"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCf3Eo-vyTR5Cs1jrbkTz0YEugrpOhXfb4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
