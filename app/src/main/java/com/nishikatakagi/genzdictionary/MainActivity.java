@@ -28,6 +28,23 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     FirebaseFirestore firestore;
+    private void createData(){
+        firestore = FirebaseFirestore.getInstance();
+        Map<String, Object> slang_words = new HashMap<>();
+        slang_words.put("word", "hello");
+        slang_words.put("meaning", "greeting");
+        firestore.collection("words").add(slang_words).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                Toast.makeText(MainActivity.this, "Word added", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(MainActivity.this, "Word not added", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
 
@@ -45,22 +62,6 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null)
                         .setAnchorView(R.id.fab).show();
-            }
-        });
-
-        firestore = FirebaseFirestore.getInstance();
-        Map<String, Object> word = new HashMap<>();
-        word.put("word", "hello");
-        word.put("meaning", "greeting");
-        firestore.collection("words").add(word).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-                Toast.makeText(MainActivity.this, "Word added", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(MainActivity.this, "Word not added", Toast.LENGTH_SHORT).show();
             }
         });
 
