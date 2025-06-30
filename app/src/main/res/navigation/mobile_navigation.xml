@@ -28,5 +28,12 @@
         android:name="com.nishikatakagi.genzdictionary.ui.home.SlangWordDetailFragment"
         android:label="Chi tiết từ lóng"
         tools:layout="@layout/fragment_slang_word_detail" />
-
+    <fragment
+        android:id="@+id/dashboard"
+        android:name="com.nishikatakagi.genzdictionary.ui.admin.DashboardFragment"
+        android:label="Dashboard" />
+    <fragment
+        android:id="@+id/request_new_word"
+        android:name="com.nishikatakagi.genzdictionary.ui.admin.RequestNewWordFragment"
+        android:label="Yêu cầu thêm từ mới" />
 </navigation>

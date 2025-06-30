@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         TextView navHeaderTitle = navigationView.getHeaderView(0).findViewById(R.id.nav_header_title);
         boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
         String username = sharedPreferences.getString("username", null);
+        boolean isAdmin = sharedPreferences.getBoolean("isAdmin", false);
         if (isLoggedIn && username != null) {
             navHeaderTitle.setText("Từ điển Gen Z xin chào " + username);
         } else {
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Cấu hình navigation
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.list_favorite)
+                R.id.nav_home, R.id.list_favorite, R.id.dashboard, R.id.request_new_word)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
@@ -72,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
         navMenu.findItem(R.id.nav_login).setVisible(!isLoggedIn);
         navMenu.findItem(R.id.nav_logout).setVisible(isLoggedIn);
         navMenu.findItem(R.id.list_favorite).setVisible(isLoggedIn);
+        navMenu.findItem(R.id.dashboard).setVisible(isLoggedIn && isAdmin);
+        navMenu.findItem(R.id.request_new_word).setVisible(isLoggedIn && isAdmin);
 
         // Xử lý sự kiện click menu
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -89,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
                     editor.putBoolean("isLoggedIn", false);
                     editor.remove("email");
                     editor.remove("username");
+                    editor.remove("isAdmin");
                     editor.apply();
                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                     startActivity(intent);

@@ -11,6 +11,12 @@
             android:id="@+id/list_favorite"
             android:title="Danh sách yêu thích" />
         <item
+            android:id="@+id/dashboard"
+            android:title="Dashboard" />
+        <item
+            android:id="@+id/request_new_word"
+            android:title="Yêu cầu thêm từ mới" />
+        <item
             android:id="@+id/nav_login"
             android:title="Đăng nhập" />
         <item
