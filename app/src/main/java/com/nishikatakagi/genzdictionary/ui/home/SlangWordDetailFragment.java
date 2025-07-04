@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.nishikatakagi.genzdictionary.R;
-import com.nishikatakagi.genzdictionary.SlangWord;
+import com.nishikatakagi.genzdictionary.models.SlangWord;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;

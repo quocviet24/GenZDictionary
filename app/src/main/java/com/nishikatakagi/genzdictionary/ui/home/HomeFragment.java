@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -23,7 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.nishikatakagi.genzdictionary.R;
-import com.nishikatakagi.genzdictionary.SlangWord;
+import com.nishikatakagi.genzdictionary.models.SlangWord;
 import com.nishikatakagi.genzdictionary.SlangWordAdapter;
 
 import java.util.ArrayList;

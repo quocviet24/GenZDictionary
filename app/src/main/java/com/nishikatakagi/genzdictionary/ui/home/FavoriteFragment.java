@@ -21,10 +21,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.nishikatakagi.genzdictionary.R;
-import com.nishikatakagi.genzdictionary.SlangWord;
+import com.nishikatakagi.genzdictionary.models.SlangWord;
 import com.nishikatakagi.genzdictionary.SlangWordAdapter;
 
 import java.util.ArrayList;

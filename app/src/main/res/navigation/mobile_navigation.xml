@@ -33,7 +33,15 @@
         android:name="com.nishikatakagi.genzdictionary.ui.admin.DashboardFragment"
         android:label="Dashboard" />
     <fragment
-        android:id="@+id/request_new_word"
+        android:id="@+id/manage_request_new_word"
         android:name="com.nishikatakagi.genzdictionary.ui.admin.RequestNewWordFragment"
+        android:label="Danh sách yêu cầu thêm từ mới" />
+    <fragment
+        android:id="@+id/client_request_fragment"
+        android:name="com.nishikatakagi.genzdictionary.ClientRequestFragment"
         android:label="Yêu cầu thêm từ mới" />
+    <fragment
+        android:id="@+id/word_request_detail_fragment"
+        android:name="com.nishikatakagi.genzdictionary.ui.admin.WordRequestDetailFragment"
+        android:label="Chi tiết yêu cầu từ mới" />
 </navigation>

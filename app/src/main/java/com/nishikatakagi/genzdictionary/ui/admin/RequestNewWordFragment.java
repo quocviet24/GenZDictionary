@@ -1,66 +1,82 @@
 package com.nishikatakagi.genzdictionary.ui.admin;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.RecyclerView;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.nishikatakagi.genzdictionary.R;
+import com.nishikatakagi.genzdictionary.models.WordRequest;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link RequestNewWordFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class RequestNewWordFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public RequestNewWordFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RequestNewWordFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static RequestNewWordFragment newInstance(String param1, String param2) {
-        RequestNewWordFragment fragment = new RequestNewWordFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private RecyclerView rvWordRequests;
+    private TextView tvEmptyState;
+    private WordRequestAdapter adapter;
+    private List<WordRequest> wordRequestList;
+    private FirebaseFirestore firestore;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        firestore = FirebaseFirestore.getInstance();
+        wordRequestList = new ArrayList<>();
     }
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_request_new_word, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_request_new_word, container, false);
+        Toast.makeText(getContext(), "Đã tải RequestNewWordFragment", Toast.LENGTH_SHORT).show();
+
+        // Bind views
+        rvWordRequests = view.findViewById(R.id.rv_word_requests);
+        tvEmptyState = view.findViewById(R.id.tv_empty_state);
+        adapter = new WordRequestAdapter(wordRequestList, wordRequest -> {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("wordRequest", wordRequest);
+            NavController navController = Navigation.findNavController(view);
+            navController.navigate(R.id.word_request_detail_fragment, bundle);
+        });
+        rvWordRequests.setAdapter(adapter);
+
+        // Fetch pending word requests
+        fetchPendingWordRequests();
+
+        return view;
+    }
+
+    private void fetchPendingWordRequests() {
+        firestore.collection("slang_words")
+                .whereEqualTo("status", "pending")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    wordRequestList.clear();
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        WordRequest wordRequest = document.toObject(WordRequest.class);
+                        wordRequestList.add(wordRequest);
+                        Log.d("RequestNewWordFragment", "Word: " + wordRequest.getWord() + ", ID: " + wordRequest.getSlangWordId());
+                    }
+                    adapter.notifyDataSetChanged();
+                    tvEmptyState.setVisibility(wordRequestList.isEmpty() ? View.VISIBLE : View.GONE);
+                    rvWordRequests.setVisibility(wordRequestList.isEmpty() ? View.GONE : View.VISIBLE);
+                    Toast.makeText(getContext(), "Tải được " + wordRequestList.size() + " yêu cầu", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getContext(), "Lỗi tải yêu cầu: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Log.e("RequestNewWordFragment", "Error: " + e.getMessage(), e);
+                });
     }
 }

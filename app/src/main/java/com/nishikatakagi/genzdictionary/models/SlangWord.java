@@ -1,4 +1,4 @@
-package com.nishikatakagi.genzdictionary;
+package com.nishikatakagi.genzdictionary.models;
 
 import com.google.firebase.Timestamp;
 

@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
@@ -37,12 +38,18 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
 
         setSupportActionBar(binding.appBarMain.toolbar);
-        binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
+        binding.appBarMain.addNewWord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null)
-                        .setAnchorView(R.id.fab).show();
+                // Check if user is logged in
+                boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
+                if (!isLoggedIn) {
+                    Toast.makeText(MainActivity.this, "Bạn cần đăng nhập để có thể yêu cầu tạo từ mới", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                // Navigate to ClientRequestFragment
+                NavController navController = Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment_content_main);
+                navController.navigate(R.id.client_request_fragment);
             }
         });
         DrawerLayout drawer = binding.drawerLayout;
@@ -61,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Cấu hình navigation
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.list_favorite, R.id.dashboard, R.id.request_new_word)
+                R.id.nav_home, R.id.list_favorite, R.id.dashboard, R.id.manage_request_new_word, R.id.client_request_fragment)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
@@ -74,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         navMenu.findItem(R.id.nav_logout).setVisible(isLoggedIn);
         navMenu.findItem(R.id.list_favorite).setVisible(isLoggedIn);
         navMenu.findItem(R.id.dashboard).setVisible(isLoggedIn && isAdmin);
-        navMenu.findItem(R.id.request_new_word).setVisible(isLoggedIn && isAdmin);
+        navMenu.findItem(R.id.manage_request_new_word).setVisible(isLoggedIn && isAdmin);
 
         // Xử lý sự kiện click menu
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
