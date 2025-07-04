@@ -1,47 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@id/nav_home">
 
     <fragment
         android:id="@+id/nav_home"
         android:name="com.nishikatakagi.genzdictionary.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        android:label="Trang chủ" >
+        <action
+            android:id="@+id/action_nav_home_to_slang_word_detail_fragment"
+            app:destination="@id/slang_word_detail_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/slang_word_detail_fragment"
+        android:name="com.nishikatakagi.genzdictionary.ui.home.SlangWordDetailFragment"
+        android:label="Chi tiết từ lóng" >
+        <argument
+            android:name="slang_word"
+            app:argType="com.nishikatakagi.genzdictionary.models.SlangWord" />
+        <action
+            android:id="@+id/action_slang_word_detail_to_update_slang_word"
+            app:destination="@id/update_slang_word_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/update_slang_word_fragment"
+        android:name="com.nishikatakagi.genzdictionary.ui.home.UpdateSlangWordFragment"
+        android:label="Cập nhật từ lóng" >
+        <argument
+            android:name="slang_word"
+            app:argType="com.nishikatakagi.genzdictionary.models.SlangWord" />
+    </fragment>
 
     <fragment
         android:id="@+id/list_favorite"
         android:name="com.nishikatakagi.genzdictionary.ui.home.FavoriteFragment"
-        android:label="Danh sách yêu thích"
-        tools:layout="@layout/fragment_favorite" >
-        <action
-            android:id="@+id/action_list_favorite_to_nav_slang_word_detail"
-            app:destination="@id/nav_slang_word_detail"
-            app:popUpTo="@id/list_favorite"
-            app:popUpToInclusive="false" />
-    </fragment>
+        android:label="Danh sách yêu thích" />
 
-    <fragment
-        android:id="@+id/nav_slang_word_detail"
-        android:name="com.nishikatakagi.genzdictionary.ui.home.SlangWordDetailFragment"
-        android:label="Chi tiết từ lóng"
-        tools:layout="@layout/fragment_slang_word_detail" />
     <fragment
         android:id="@+id/dashboard"
         android:name="com.nishikatakagi.genzdictionary.ui.admin.DashboardFragment"
         android:label="Dashboard" />
+
     <fragment
         android:id="@+id/manage_request_new_word"
         android:name="com.nishikatakagi.genzdictionary.ui.admin.RequestNewWordFragment"
-        android:label="Danh sách yêu cầu thêm từ mới" />
-    <fragment
-        android:id="@+id/client_request_fragment"
-        android:name="com.nishikatakagi.genzdictionary.ClientRequestFragment"
-        android:label="Yêu cầu thêm từ mới" />
+        android:label="Danh sách yêu cầu từ mới" >
+        <action
+            android:id="@+id/action_manage_request_new_word_to_word_request_detail"
+            app:destination="@id/word_request_detail_fragment" />
+    </fragment>
+
     <fragment
         android:id="@+id/word_request_detail_fragment"
         android:name="com.nishikatakagi.genzdictionary.ui.admin.WordRequestDetailFragment"
-        android:label="Chi tiết yêu cầu từ mới" />
+        android:label="Chi tiết yêu cầu từ" >
+        <argument
+            android:name="wordRequest"
+            app:argType="com.nishikatakagi.genzdictionary.models.WordRequest" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/client_request_fragment"
+        android:name="com.nishikatakagi.genzdictionary.ClientRequestFragment"
+        android:label="Thêm từ mới" />
 </navigation>

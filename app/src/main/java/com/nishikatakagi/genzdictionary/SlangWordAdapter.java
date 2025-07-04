@@ -111,7 +111,7 @@ public class SlangWordAdapter extends RecyclerView.Adapter<SlangWordAdapter.Slan
             Bundle bundle = new Bundle();
             bundle.putSerializable("slang_word", slangWord);
             NavController navController = Navigation.findNavController(v);
-            navController.navigate(R.id.nav_slang_word_detail, bundle);
+            navController.navigate(R.id.action_nav_home_to_slang_word_detail_fragment, bundle);
         });
     }
 
