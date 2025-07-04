@@ -99,6 +99,7 @@ public class HomeFragment extends Fragment {
         tvEmptyState.setVisibility(View.GONE);
 
         Query query = firestore.collection("slang_words")
+                .whereEqualTo("status", "active") // 🔥 Chỉ lấy những từ active
                 .orderBy("createdAt", sortNewest ? Query.Direction.DESCENDING : Query.Direction.ASCENDING);
 
         query.get().addOnCompleteListener(task -> {

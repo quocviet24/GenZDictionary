@@ -67,7 +67,7 @@ public class WordRequestDetailFragment extends Fragment {
         }
 
         // Set up button listeners
-        btnAccept.setOnClickListener(v -> updateWordRequestStatus("accepted"));
+        btnAccept.setOnClickListener(v -> updateWordRequestStatus("active"));
         btnReject.setOnClickListener(v -> updateWordRequestStatus("rejected"));
 
         return view;
