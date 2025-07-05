@@ -22,8 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static android.content.Context.MODE_PRIVATE;
-
 public class SlangWordAdapter extends RecyclerView.Adapter<SlangWordAdapter.SlangWordViewHolder> {
 
     private List<SlangWord> slangWordList;
@@ -36,7 +34,7 @@ public class SlangWordAdapter extends RecyclerView.Adapter<SlangWordAdapter.Slan
         this.context = context;
         this.slangWordList = slangWordList;
         this.firestore = FirebaseFirestore.getInstance();
-        this.sharedPreferences = context.getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        this.sharedPreferences = context.getSharedPreferences("loginPrefs", Context.MODE_PRIVATE);
         this.favoriteStatus = new HashMap<>();
         loadFavoriteStatus();
     }
@@ -111,7 +109,10 @@ public class SlangWordAdapter extends RecyclerView.Adapter<SlangWordAdapter.Slan
             Bundle bundle = new Bundle();
             bundle.putSerializable("slang_word", slangWord);
             NavController navController = Navigation.findNavController(v);
-            navController.navigate(R.id.action_nav_home_to_slang_word_detail_fragment, bundle);
+            int actionId = "deactive".equals(slangWord.getStatus())
+                    ? R.id.action_garbage_to_slang_word_detail_fragment
+                    : R.id.action_nav_home_to_slang_word_detail_fragment;
+            navController.navigate(actionId, bundle);
         });
     }
 

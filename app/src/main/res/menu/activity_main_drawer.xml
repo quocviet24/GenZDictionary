@@ -17,6 +17,9 @@
             android:id="@+id/manage_request_new_word"
             android:title="Yêu cầu thêm từ mới" />
         <item
+            android:id="@+id/garbage"
+            android:title="Thùng rác" />
+        <item
             android:id="@+id/nav_login"
             android:title="Đăng nhập" />
         <item

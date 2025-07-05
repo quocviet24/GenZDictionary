@@ -27,7 +27,7 @@ public class SlangWordDetailFragment extends Fragment {
 
     private TextView tvDetailWord, tvDetailMeaning, tvDetailExample, tvDetailOrigin;
     private TextView tvDetailSlangWordId, tvDetailDate, tvDetailCreatedAt, tvDetailCreatedBy;
-    private MaterialButton btnUpdate, btnDeactivate;
+    private MaterialButton btnUpdate, btnDeactivate, btnReactivate, btnDelete;
     private LinearLayout adminButtonsContainer;
     private FirebaseFirestore firestore;
     private SlangWord slangWord;
@@ -59,11 +59,26 @@ public class SlangWordDetailFragment extends Fragment {
         adminButtonsContainer = view.findViewById(R.id.admin_buttons_container);
         btnUpdate = view.findViewById(R.id.btn_update);
         btnDeactivate = view.findViewById(R.id.btn_deactivate);
+        btnReactivate = view.findViewById(R.id.btn_reactivate);
+        btnDelete = view.findViewById(R.id.btn_delete);
 
         // Check if user is admin
         boolean isAdmin = sharedPreferences.getBoolean("isAdmin", false);
-        if (isAdmin) {
+        if (isAdmin && slangWord != null) {
             adminButtonsContainer.setVisibility(View.VISIBLE);
+            if ("deactive".equals(slangWord.getStatus())) {
+                btnUpdate.setVisibility(View.GONE);
+                btnDeactivate.setVisibility(View.GONE);
+                btnReactivate.setVisibility(View.VISIBLE);
+                btnDelete.setVisibility(View.VISIBLE);
+            } else {
+                btnUpdate.setVisibility(View.VISIBLE);
+                btnDeactivate.setVisibility(View.VISIBLE);
+                btnReactivate.setVisibility(View.GONE);
+                btnDelete.setVisibility(View.GONE);
+            }
+        } else {
+            adminButtonsContainer.setVisibility(View.GONE);
         }
 
         // Populate data
@@ -99,10 +114,14 @@ public class SlangWordDetailFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("slang_word", slangWord);
                 NavController navController = Navigation.findNavController(view);
-                navController.navigate(R.id.update_slang_word_fragment, bundle);
+                navController.navigate(R.id.action_slang_word_detail_to_update_slang_word, bundle);
             });
 
             btnDeactivate.setOnClickListener(v -> showDeactivateConfirmationDialog());
+
+            btnReactivate.setOnClickListener(v -> showReactivateConfirmationDialog());
+
+            btnDelete.setOnClickListener(v -> showDeleteConfirmationDialog());
         }
 
         return view;
@@ -124,6 +143,54 @@ public class SlangWordDetailFragment extends Fragment {
                                 })
                                 .addOnFailureListener(e -> {
                                     Toast.makeText(getContext(), "Lỗi khi deactive từ: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                });
+                    }
+                })
+                .setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss())
+                .create()
+                .show();
+    }
+
+    private void showReactivateConfirmationDialog() {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Xác nhận Kích hoạt lại")
+                .setMessage("Bạn có chắc muốn kích hoạt lại từ này không?")
+                .setPositiveButton("Có", (dialog, which) -> {
+                    if (slangWord != null && slangWord.getSlangWordId() != null) {
+                        firestore.collection("slang_words")
+                                .document(slangWord.getSlangWordId())
+                                .update("status", "active")
+                                .addOnSuccessListener(aVoid -> {
+                                    Toast.makeText(getContext(), "Đã kích hoạt lại từ thành công", Toast.LENGTH_SHORT).show();
+                                    NavController navController = Navigation.findNavController(requireView());
+                                    navController.popBackStack();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(getContext(), "Lỗi khi kích hoạt lại từ: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                });
+                    }
+                })
+                .setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss())
+                .create()
+                .show();
+    }
+
+    private void showDeleteConfirmationDialog() {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Xác nhận Xóa")
+                .setMessage("Bạn có chắc muốn xóa hoàn toàn từ này không? Hành động này không thể hoàn tác.")
+                .setPositiveButton("Có", (dialog, which) -> {
+                    if (slangWord != null && slangWord.getSlangWordId() != null) {
+                        firestore.collection("slang_words")
+                                .document(slangWord.getSlangWordId())
+                                .delete()
+                                .addOnSuccessListener(aVoid -> {
+                                    Toast.makeText(getContext(), "Đã xóa từ thành công", Toast.LENGTH_SHORT).show();
+                                    NavController navController = Navigation.findNavController(requireView());
+                                    navController.popBackStack();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(getContext(), "Lỗi khi xóa từ: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                 });
                     }
                 })

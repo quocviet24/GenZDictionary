@@ -3,6 +3,7 @@ package com.nishikatakagi.genzdictionary.ui.home;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +23,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.nishikatakagi.genzdictionary.R;
-import com.nishikatakagi.genzdictionary.models.SlangWord;
 import com.nishikatakagi.genzdictionary.SlangWordAdapter;
+import com.nishikatakagi.genzdictionary.models.SlangWord;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,34 +98,42 @@ public class HomeFragment extends Fragment {
     private void fetchSlangWords() {
         progressBar.setVisibility(View.VISIBLE);
         tvEmptyState.setVisibility(View.GONE);
+        Log.d("HomeFragment", "Bắt đầu truy vấn Firestore cho slang_words với status = active");
 
         Query query = firestore.collection("slang_words")
-                .whereEqualTo("status", "active") // 🔥 Chỉ lấy những từ active
+                .whereEqualTo("status", "active")
                 .orderBy("createdAt", sortNewest ? Query.Direction.DESCENDING : Query.Direction.ASCENDING);
 
         query.get().addOnCompleteListener(task -> {
+            progressBar.setVisibility(View.GONE);
             if (task.isSuccessful()) {
                 slangWordList.clear();
                 QuerySnapshot querySnapshot = task.getResult();
-                if (querySnapshot != null) {
+                if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                    Log.d("HomeFragment", "Tải được " + querySnapshot.size() + " từ lóng với status = active");
                     for (var doc : querySnapshot) {
-                        SlangWord slangWord = doc.toObject(SlangWord.class);
-                        if (slangWord.getSlangWordId() == null) {
-                            slangWord.setSlangWordId(doc.getId());
+                        try {
+                            SlangWord slangWord = doc.toObject(SlangWord.class);
+                            if (slangWord.getSlangWordId() == null) {
+                                slangWord.setSlangWordId(doc.getId());
+                            }
+                            Log.d("HomeFragment", "Word: " + slangWord.getWord() + ", Status: " + slangWord.getStatus() + ", ID: " + slangWord.getSlangWordId());
+                            slangWordList.add(slangWord);
+                        } catch (Exception e) {
+                            Log.e("HomeFragment", "Lỗi khi ánh xạ document " + doc.getId() + ": " + e.getMessage(), e);
                         }
-                        slangWordList.add(slangWord);
                     }
                     filterAndUpdateList();
                 } else {
-                    progressBar.setVisibility(View.GONE);
+                    Log.d("HomeFragment", "Không tìm thấy tài liệu nào với status = active");
                     tvEmptyState.setVisibility(View.VISIBLE);
                     tvEmptyState.setText("Không tìm thấy từ lóng nào");
                 }
             } else {
-                progressBar.setVisibility(View.GONE);
+                Log.e("HomeFragment", "Lỗi tải dữ liệu từ Firestore: " + (task.getException() != null ? task.getException().getMessage() : "Unknown error"));
                 tvEmptyState.setVisibility(View.VISIBLE);
                 tvEmptyState.setText("Lỗi khi tải dữ liệu từ lóng");
-                Snackbar.make(requireView(), "Lỗi khi tải dữ liệu từ lóng", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(requireView(), "Lỗi khi tải dữ liệu từ lóng: " + (task.getException() != null ? task.getException().getMessage() : "Unknown error"), Snackbar.LENGTH_LONG).show();
             }
         });
     }
@@ -135,8 +144,8 @@ public class HomeFragment extends Fragment {
             filteredWordList.addAll(slangWordList);
         } else {
             for (SlangWord slangWord : slangWordList) {
-                if (slangWord.getWord().toLowerCase().contains(currentQuery) ||
-                        slangWord.getMeaning().toLowerCase().contains(currentQuery)) {
+                if (slangWord.getWord() != null && slangWord.getWord().toLowerCase().contains(currentQuery) ||
+                        slangWord.getMeaning() != null && slangWord.getMeaning().toLowerCase().contains(currentQuery)) {
                     filteredWordList.add(slangWord);
                 }
             }
