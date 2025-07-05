@@ -3,6 +3,7 @@ package com.nishikatakagi.genzdictionary;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ public class SlangWordAdapter extends RecyclerView.Adapter<SlangWordAdapter.Slan
     private FirebaseFirestore firestore;
     private SharedPreferences sharedPreferences;
     private Map<String, Boolean> favoriteStatus;
+    private static final String TAG = "SlangWordAdapter";
 
     public SlangWordAdapter(Context context, List<SlangWord> slangWordList) {
         this.context = context;
@@ -69,22 +71,29 @@ public class SlangWordAdapter extends RecyclerView.Adapter<SlangWordAdapter.Slan
                 return;
             }
 
-            if (isFavorite) {
+            // Toggle favorite status
+            if (favoriteStatus.getOrDefault(slangWordId, false)) {
                 // Remove from favorites
                 firestore.collection("favorites")
                         .whereEqualTo("userEmail", userEmail)
                         .whereEqualTo("slangWordId", slangWordId)
                         .get()
                         .addOnSuccessListener(querySnapshot -> {
-                            for (var doc : querySnapshot) {
-                                doc.getReference().delete();
+                            if (!querySnapshot.isEmpty()) {
+                                for (var doc : querySnapshot) {
+                                    doc.getReference().delete();
+                                }
+                                favoriteStatus.put(slangWordId, false);
+                                holder.ivFavorite.setImageResource(R.drawable.ic_star_outline);
+                                Toast.makeText(context, "Đã xóa \"" + slangWord.getWord() + "\" khỏi danh sách yêu thích", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Log.e(TAG, "Không tìm thấy tài liệu yêu thích cho slangWordId: " + slangWordId);
+                                Toast.makeText(context, "Lỗi: Không tìm thấy từ trong danh sách yêu thích", Toast.LENGTH_SHORT).show();
                             }
-                            favoriteStatus.put(slangWordId, false);
-                            holder.ivFavorite.setImageResource(R.drawable.ic_star_outline);
-                            Toast.makeText(context, "Đã xóa \"" + slangWord.getWord() + "\" khỏi danh sách yêu thích", Toast.LENGTH_SHORT).show();
                         })
                         .addOnFailureListener(e -> {
-                            Toast.makeText(context, "Lỗi khi xóa khỏi danh sách yêu thích", Toast.LENGTH_SHORT).show();
+                            Log.e(TAG, "Lỗi khi xóa khỏi danh sách yêu thích: " + e.getMessage());
+                            Toast.makeText(context, "Lỗi khi xóa khỏi danh sách yêu thích: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         });
             } else {
                 // Add to favorites
@@ -99,7 +108,8 @@ public class SlangWordAdapter extends RecyclerView.Adapter<SlangWordAdapter.Slan
                             Toast.makeText(context, "Đã thêm \"" + slangWord.getWord() + "\" vào danh sách yêu thích", Toast.LENGTH_SHORT).show();
                         })
                         .addOnFailureListener(e -> {
-                            Toast.makeText(context, "Lỗi khi thêm vào danh sách yêu thích", Toast.LENGTH_SHORT).show();
+                            Log.e(TAG, "Lỗi khi thêm vào danh sách yêu thích: " + e.getMessage());
+                            Toast.makeText(context, "Lỗi khi thêm vào danh sách yêu thích: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         });
             }
         });
@@ -129,7 +139,11 @@ public class SlangWordAdapter extends RecyclerView.Adapter<SlangWordAdapter.Slan
 
     private void loadFavoriteStatus() {
         String userEmail = sharedPreferences.getString("email", null);
-        if (userEmail == null) return;
+        if (userEmail == null) {
+            favoriteStatus.clear();
+            notifyDataSetChanged();
+            return;
+        }
 
         firestore.collection("favorites")
                 .whereEqualTo("userEmail", userEmail)
@@ -142,9 +156,11 @@ public class SlangWordAdapter extends RecyclerView.Adapter<SlangWordAdapter.Slan
                             favoriteStatus.put(slangWordId, true);
                         }
                     }
+                    Log.d(TAG, "Đã tải trạng thái yêu thích: " + favoriteStatus.size() + " mục");
                     notifyDataSetChanged();
                 })
                 .addOnFailureListener(e -> {
+                    Log.e(TAG, "Lỗi khi tải trạng thái yêu thích: " + e.getMessage());
                     Toast.makeText(context, "Lỗi khi tải trạng thái yêu thích", Toast.LENGTH_SHORT).show();
                 });
     }
