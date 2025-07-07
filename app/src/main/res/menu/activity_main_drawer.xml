@@ -14,6 +14,9 @@
             android:id="@+id/dashboard"
             android:title="Dashboard" />
         <item
+            android:id="@+id/manage_account"
+            android:title="Quản lý tài khoản" />
+        <item
             android:id="@+id/manage_request_new_word"
             android:title="Yêu cầu thêm từ mới" />
         <item

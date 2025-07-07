@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tv_account_detail_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Email: "
+        android:padding="8dp" />
+
+    <TextView
+        android:id="@+id/tv_account_detail_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Username: "
+        android:padding="8dp" />
+
+    <TextView
+        android:id="@+id/tv_account_detail_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Password: "
+        android:padding="8dp" />
+
+    <TextView
+        android:id="@+id/tv_account_detail_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Status: "
+        android:padding="8dp" />
+
+    <TextView
+        android:id="@+id/tv_account_detail_created_at"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Created At: "
+        android:padding="8dp" />
+
+    <Button
+        android:id="@+id/btn_toggle_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ngừng hoạt động"
+        android:padding="8dp" />
+
+</LinearLayout>

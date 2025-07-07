@@ -156,19 +156,26 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         QuerySnapshot querySnapshot = task.getResult();
                         if (querySnapshot != null && !querySnapshot.isEmpty()) {
-                            String username = querySnapshot.getDocuments().get(0).getString("username");
-                            Boolean isAdmin = querySnapshot.getDocuments().get(0).contains("role") &&
-                                    "admin".equals(querySnapshot.getDocuments().get(0).getString("role"));
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString("email", email);
-                            editor.putString("username", username);
-                            editor.putBoolean("isLoggedIn", true);
-                            editor.putBoolean("isAdmin", isAdmin);
-                            editor.apply();
+                            String status = querySnapshot.getDocuments().get(0).getString("status");
+                            if ("active".equals(status)) {
+                                String username = querySnapshot.getDocuments().get(0).getString("username");
+                                Boolean isAdmin = querySnapshot.getDocuments().get(0).contains("role") &&
+                                        "admin".equals(querySnapshot.getDocuments().get(0).getString("role"));
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString("email", email);
+                                editor.putString("username", username);
+                                editor.putBoolean("isLoggedIn", true);
+                                editor.putBoolean("isAdmin", isAdmin);
+                                editor.apply();
 
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                tvMessage.setVisibility(View.VISIBLE);
+                                tvMessage.setText("Tài khoản của bạn hiện tại đang bị khóa");
+                                tvMessage.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+                            }
                         } else {
                             tvMessage.setVisibility(View.VISIBLE);
                             tvMessage.setText("Thông tin tài khoản hoặc mật khẩu không đúng, vui lòng thử lại");

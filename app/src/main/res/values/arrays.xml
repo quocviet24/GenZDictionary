@@ -5,4 +5,9 @@
         <item>Dân Tộc</item>
         <item>Khác</item>
     </string-array>
+    <string-array name="filter_options">
+        <item>Tất cả</item>
+        <item>Hoạt động</item>
+        <item>Ngừng hoạt động</item>
+    </string-array>
 </resources>

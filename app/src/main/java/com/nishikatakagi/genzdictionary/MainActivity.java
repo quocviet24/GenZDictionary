@@ -67,8 +67,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Cấu hình navigation
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.list_favorite, R.id.dashboard, R.id.manage_request_new_word,
-                R.id.garbage, R.id.client_request_fragment)
+                R.id.nav_home, R.id.list_favorite, R.id.dashboard, R.id.manage_account,
+                R.id.manage_request_new_word, R.id.garbage, R.id.client_request_fragment)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
         navMenu.findItem(R.id.nav_logout).setVisible(isLoggedIn);
         navMenu.findItem(R.id.list_favorite).setVisible(isLoggedIn);
         navMenu.findItem(R.id.dashboard).setVisible(isLoggedIn && isAdmin);
+        navMenu.findItem(R.id.manage_account).setVisible(isLoggedIn && isAdmin);
         navMenu.findItem(R.id.manage_request_new_word).setVisible(isLoggedIn && isAdmin);
         navMenu.findItem(R.id.garbage).setVisible(isLoggedIn && isAdmin);
 
@@ -112,6 +113,11 @@ public class MainActivity extends AppCompatActivity {
             } else if (id == R.id.list_favorite && navController.getCurrentDestination().getId() == R.id.client_request_fragment) {
                 // Điều hướng từ ClientRequestFragment đến Favorite
                 navController.navigate(R.id.action_client_request_to_list_favorite);
+                drawer.closeDrawers();
+                return true;
+            } else if (id == R.id.manage_account && navController.getCurrentDestination().getId() == R.id.client_request_fragment) {
+                // Điều hướng từ ClientRequestFragment đến ManageAccount
+                navController.navigate(R.id.manage_account);
                 drawer.closeDrawers();
                 return true;
             }
