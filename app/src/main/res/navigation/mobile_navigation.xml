@@ -11,6 +11,9 @@
         <action
             android:id="@+id/action_nav_home_to_slang_word_detail_fragment"
             app:destination="@id/slang_word_detail_fragment" />
+        <action
+            android:id="@+id/action_nav_home_to_client_request_fragment"
+            app:destination="@id/client_request_fragment" />
     </fragment>
 
     <fragment
@@ -37,7 +40,11 @@
     <fragment
         android:id="@+id/list_favorite"
         android:name="com.nishikatakagi.genzdictionary.ui.home.FavoriteFragment"
-        android:label="Danh sách yêu thích" />
+        android:label="Danh sách yêu thích" >
+        <action
+            android:id="@+id/action_list_favorite_to_client_request_fragment"
+            app:destination="@id/client_request_fragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/dashboard"
@@ -65,7 +72,18 @@
     <fragment
         android:id="@+id/client_request_fragment"
         android:name="com.nishikatakagi.genzdictionary.ClientRequestFragment"
-        android:label="Thêm từ mới" />
+        android:label="Thêm từ mới" >
+        <action
+            android:id="@+id/action_client_request_to_home"
+            app:destination="@id/nav_home"
+            app:popUpTo="@id/nav_home"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_client_request_to_list_favorite"
+            app:destination="@id/list_favorite"
+            app:popUpTo="@id/list_favorite"
+            app:popUpToInclusive="true" />
+    </fragment>
 
     <fragment
         android:id="@+id/garbage"

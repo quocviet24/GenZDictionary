@@ -1,23 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_client_request"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/fragment_client_request"
     android:orientation="vertical"
     android:padding="24dp"
     android:background="@color/background_color"
     android:gravity="center">
 
+    <!-- Nút Back -->
+
     <!-- Tiêu đề -->
+
+    <ImageButton
+        android:id="@+id/btn_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginBottom="16dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Quay lại"
+        android:src="@drawable/ic_back" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:text="Yêu cầu thêm từ mới"
-        android:textSize="28sp"
-        android:textStyle="bold"
         android:textColor="@color/primary_color"
-        android:layout_marginBottom="8dp" />
+        android:textSize="28sp"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -46,22 +59,14 @@
             android:drawablePadding="12dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
+    <Spinner
+        android:id="@+id/spinner_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        app:boxStrokeColor="@color/primary_color"
-        app:hintTextColor="@color/primary_color"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_category"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Danh mục"
-            android:inputType="text"
-            android:drawablePadding="12dp" />
-    </com.google.android.material.textfield.TextInputLayout>
+        android:entries="@array/category_options"
+        android:background="@drawable/spinner_background"
+        android:padding="12dp" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"

@@ -196,6 +196,15 @@ public class LoginActivity extends AppCompatActivity {
         firestore = FirebaseFirestore.getInstance();
         sharedPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
 
+        // Kiểm tra trạng thái đăng nhập
+        boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
+        if (isLoggedIn) {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.login), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);

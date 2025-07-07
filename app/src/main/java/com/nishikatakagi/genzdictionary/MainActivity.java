@@ -10,15 +10,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.nishikatakagi.genzdictionary.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
     private SharedPreferences sharedPreferences;
+    private DrawerLayout drawer;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,22 +39,20 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
 
         setSupportActionBar(binding.appBarMain.toolbar);
-        binding.appBarMain.addNewWord.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Check if user is logged in
-                boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
-                if (!isLoggedIn) {
-                    Toast.makeText(MainActivity.this, "Bạn cần đăng nhập để có thể yêu cầu tạo từ mới", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                // Navigate to ClientRequestFragment
-                NavController navController = Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment_content_main);
-                navController.navigate(R.id.client_request_fragment);
+        binding.appBarMain.addNewWord.setOnClickListener(view -> {
+            // Check if user is logged in
+            boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
+            if (!isLoggedIn) {
+                Toast.makeText(MainActivity.this, "Bạn cần đăng nhập để có thể yêu cầu tạo từ mới", Toast.LENGTH_SHORT).show();
+                return;
             }
+            // Navigate to ClientRequestFragment
+            NavController navController = Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment_content_main);
+            navController.navigate(R.id.client_request_fragment);
         });
-        DrawerLayout drawer = binding.drawerLayout;
-        NavigationView navigationView = binding.navView;
+
+        drawer = binding.drawerLayout;
+        navigationView = binding.navView;
 
         // Cập nhật tiêu đề của navigation header
         TextView navHeaderTitle = navigationView.getHeaderView(0).findViewById(R.id.nav_header_title);
@@ -86,35 +85,42 @@ public class MainActivity extends AppCompatActivity {
         navMenu.findItem(R.id.garbage).setVisible(isLoggedIn && isAdmin);
 
         // Xử lý sự kiện click menu
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-                if (id == R.id.nav_login) {
-                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    drawer.closeDrawers();
-                    return true;
-                } else if (id == R.id.nav_logout) {
-                    // Xử lý đăng xuất
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putBoolean("isLoggedIn", false);
-                    editor.remove("email");
-                    editor.remove("username");
-                    editor.remove("isAdmin");
-                    editor.apply();
-                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
-                    return true;
-                }
-                // Xử lý các mục menu khác
-                boolean handled = NavigationUI.onNavDestinationSelected(item, navController);
-                if (handled) {
-                    drawer.closeDrawers();
-                }
-                return handled || MainActivity.super.onOptionsItemSelected(item);
+        navigationView.setNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.nav_login) {
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+                drawer.closeDrawers();
+                return true;
+            } else if (id == R.id.nav_logout) {
+                // Xử lý đăng xuất
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("isLoggedIn", false);
+                editor.remove("email");
+                editor.remove("username");
+                editor.remove("isAdmin");
+                editor.apply();
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+                return true;
+            } else if (id == R.id.nav_home && navController.getCurrentDestination().getId() == R.id.client_request_fragment) {
+                // Điều hướng từ ClientRequestFragment đến Home
+                navController.navigate(R.id.action_client_request_to_home);
+                drawer.closeDrawers();
+                return true;
+            } else if (id == R.id.list_favorite && navController.getCurrentDestination().getId() == R.id.client_request_fragment) {
+                // Điều hướng từ ClientRequestFragment đến Favorite
+                navController.navigate(R.id.action_client_request_to_list_favorite);
+                drawer.closeDrawers();
+                return true;
             }
+            // Xử lý các mục menu khác
+            boolean handled = NavigationUI.onNavDestinationSelected(item, navController);
+            if (handled) {
+                drawer.closeDrawers();
+            }
+            return handled;
         });
     }
 
