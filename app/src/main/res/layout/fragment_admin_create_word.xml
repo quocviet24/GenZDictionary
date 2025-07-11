@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_admin_create_word"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@color/background_color"
+    android:gravity="center">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Điền thông tin để tạo từ mới"
+        android:textSize="16sp"
+        android:textColor="@color/text_secondary"
+        android:layout_marginBottom="24dp"
+        android:gravity="center" />
+
+    <!-- Input Form -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:boxStrokeColor="@color/primary_color"
+        app:hintTextColor="@color/primary_color"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_word"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Từ mới"
+            android:inputType="text"
+            android:drawablePadding="12dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Spinner
+        android:id="@+id/spinner_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:entries="@array/category_options"
+        android:background="@drawable/spinner_background"
+        android:padding="12dp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:boxStrokeColor="@color/primary_color"
+        app:hintTextColor="@color/primary_color"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_meaning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ý nghĩa"
+            android:inputType="textMultiLine"
+            android:minLines="2"
+            android:drawablePadding="12dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:boxStrokeColor="@color/primary_color"
+        app:hintTextColor="@color/primary_color"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_origin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nguồn gốc"
+            android:inputType="text"
+            android:drawablePadding="12dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        app:boxStrokeColor="@color/primary_color"
+        app:hintTextColor="@color/primary_color"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_example"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ví dụ"
+            android:inputType="textMultiLine"
+            android:minLines="2"
+            android:drawablePadding="12dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Submit Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_submit"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="Tạo từ"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:cornerRadius="28dp"
+        android:backgroundTint="@color/primary_color"
+        android:layout_marginBottom="24dp" />
+
+</LinearLayout>

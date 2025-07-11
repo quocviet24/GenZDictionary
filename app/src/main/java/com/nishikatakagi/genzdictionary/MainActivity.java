@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
         navMenu.findItem(R.id.manage_account).setVisible(isLoggedIn && isAdmin);
         navMenu.findItem(R.id.manage_request_new_word).setVisible(isLoggedIn && isAdmin);
         navMenu.findItem(R.id.garbage).setVisible(isLoggedIn && isAdmin);
+        navMenu.findItem(R.id.admin_create_word_fragment).setVisible(isLoggedIn && isAdmin);
 
         // Xử lý sự kiện click menu
         navigationView.setNavigationItemSelectedListener(item -> {

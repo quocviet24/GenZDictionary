@@ -10,7 +10,10 @@
         android:label="Trang chủ" >
         <action
             android:id="@+id/action_nav_home_to_slang_word_detail_fragment"
-            app:destination="@id/slang_word_detail_fragment" />
+            app:launchSingleTop="true"
+            app:destination="@id/slang_word_detail_fragment"
+            app:popUpTo="@id/nav_home"
+            app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_nav_home_to_client_request_fragment"
             app:destination="@id/client_request_fragment" />
@@ -49,7 +52,11 @@
     <fragment
         android:id="@+id/dashboard"
         android:name="com.nishikatakagi.genzdictionary.ui.admin.DashboardFragment"
-        android:label="Dashboard" />
+        android:label="Dashboard" >
+        <action
+            android:id="@+id/action_dashboard_to_admin_create_word"
+            app:destination="@id/admin_create_word_fragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/manage_request_new_word"
@@ -110,6 +117,17 @@
         <argument
             android:name="account"
             app:argType="com.nishikatakagi.genzdictionary.models.Account" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/admin_create_word_fragment"
+        android:name="com.nishikatakagi.genzdictionary.ui.admin.AdminCreateWordFragment"
+        android:label="Tạo từ mới" >
+        <action
+            android:id="@+id/action_admin_create_word_to_dashboard"
+            app:destination="@id/dashboard"
+            app:popUpTo="@id/dashboard"
+            app:popUpToInclusive="false" />
     </fragment>
 
 </navigation>

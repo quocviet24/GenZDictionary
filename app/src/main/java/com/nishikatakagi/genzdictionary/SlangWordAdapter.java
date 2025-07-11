@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -39,6 +38,16 @@ public class SlangWordAdapter extends RecyclerView.Adapter<SlangWordAdapter.Slan
         this.sharedPreferences = context.getSharedPreferences("loginPrefs", Context.MODE_PRIVATE);
         this.favoriteStatus = new HashMap<>();
         loadFavoriteStatus();
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(SlangWord slangWord, View view);
+    }
+
+    private OnItemClickListener listener;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 
     @NonNull
@@ -116,13 +125,9 @@ public class SlangWordAdapter extends RecyclerView.Adapter<SlangWordAdapter.Slan
 
         // Handle item click for details
         holder.itemView.setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("slang_word", slangWord);
-            NavController navController = Navigation.findNavController(v);
-            int actionId = "deactive".equals(slangWord.getStatus())
-                    ? R.id.action_garbage_to_slang_word_detail_fragment
-                    : R.id.action_nav_home_to_slang_word_detail_fragment;
-            navController.navigate(actionId, bundle);
+            if (listener != null) {
+                listener.onItemClick(slangWord, v);
+            }
         });
     }
 
