@@ -6,41 +6,48 @@ import androidx.lifecycle.ViewModel;
 
 import com.nishikatakagi.genzdictionary.models.SlangWord;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeViewModel extends ViewModel {
+    private final MutableLiveData<List<SlangWord>> slangWords = new MutableLiveData<>();
+    private final MutableLiveData<Integer> scrollPosition = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> initialDataLoaded = new MutableLiveData<>(false);
+    private final MutableLiveData<String> selectedCategory = new MutableLiveData<>("Tất cả"); // Default to "Tất cả"
 
-    private final MutableLiveData<List<SlangWord>> _slangWords = new MutableLiveData<>();
+    public void setSlangWords(List<SlangWord> words) {
+        slangWords.setValue(words);
+    }
+
     public LiveData<List<SlangWord>> getSlangWords() {
-        return _slangWords;
-    }
-
-    private final MutableLiveData<Integer> _scrollPosition = new MutableLiveData<>();
-    public LiveData<Integer> getScrollPosition() {
-        return _scrollPosition;
-    }
-
-    // Biến này để kiểm tra xem dữ liệu đã được tải lần đầu chưa
-    private boolean isInitialDataLoaded = false;
-
-    public void setSlangWords(List<SlangWord> slangWords) {
-        _slangWords.setValue(slangWords);
+        return slangWords;
     }
 
     public void setScrollPosition(int position) {
-        _scrollPosition.setValue(position);
+        scrollPosition.setValue(position);
     }
 
-    public boolean isInitialDataLoaded() {
-        return isInitialDataLoaded;
+    public LiveData<Integer> getScrollPosition() {
+        return scrollPosition;
     }
 
     public void setInitialDataLoaded(boolean loaded) {
-        this.isInitialDataLoaded = loaded;
+        initialDataLoaded.setValue(loaded);
     }
 
-    // Phương thức để kiểm tra xem ViewModel đã có dữ liệu chưa
+    public LiveData<Boolean> getInitialDataLoaded() {
+        return initialDataLoaded;
+    }
+
     public boolean hasData() {
-        return _slangWords.getValue() != null && !_slangWords.getValue().isEmpty();
+        return Boolean.TRUE.equals(initialDataLoaded.getValue()) && slangWords.getValue() != null;
+    }
+
+    public void setSelectedCategory(String category) {
+        selectedCategory.setValue(category);
+    }
+
+    public LiveData<String> getSelectedCategory() {
+        return selectedCategory;
     }
 }

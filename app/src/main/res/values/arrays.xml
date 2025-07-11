@@ -10,4 +10,12 @@
         <item>Hoạt động</item>
         <item>Ngừng hoạt động</item>
     </string-array>
+    <!-- New category filter options -->
+    <string-array name="category_filter_options">
+        <item>Tất cả</item>
+        <item>Gen Z</item>
+        <item>Dân Tộc</item>
+        <item>Khác</item>
+    </string-array>
+
 </resources>

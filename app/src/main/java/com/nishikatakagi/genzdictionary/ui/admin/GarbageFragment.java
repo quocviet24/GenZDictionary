@@ -65,6 +65,12 @@ public class GarbageFragment extends Fragment {
         // Initialize RecyclerView
         slangWordList = new ArrayList<>();
         adapter = new SlangWordAdapter(requireContext(), slangWordList);
+        adapter.setOnItemClickListener((slangWord, itemView) -> {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("slang_word", slangWord);
+            NavController navController = Navigation.findNavController(itemView);
+            navController.navigate(R.id.action_garbage_to_slang_word_detail_fragment, bundle);
+        });
         rvGarbageWords.setLayoutManager(new LinearLayoutManager(getContext()));
         rvGarbageWords.setAdapter(adapter);
 

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,7 +23,8 @@ import java.util.Map;
 
 public class UpdateSlangWordFragment extends Fragment {
 
-    private TextInputEditText etWord, etCategory, etMeaning, etOrigin, etExample;
+    private TextInputEditText etWord, etMeaning, etOrigin, etExample;
+    private Spinner spinnerCategory;
     private MaterialButton btnSave;
     private FirebaseFirestore firestore;
     private SlangWord slangWord;
@@ -42,7 +44,7 @@ public class UpdateSlangWordFragment extends Fragment {
 
         // Bind views
         etWord = view.findViewById(R.id.et_word);
-        etCategory = view.findViewById(R.id.et_category);
+        spinnerCategory = view.findViewById(R.id.spinner_category);
         etMeaning = view.findViewById(R.id.et_meaning);
         etOrigin = view.findViewById(R.id.et_origin);
         etExample = view.findViewById(R.id.et_example);
@@ -51,7 +53,16 @@ public class UpdateSlangWordFragment extends Fragment {
         // Populate fields with existing data
         if (slangWord != null) {
             etWord.setText(slangWord.getWord() != null ? slangWord.getWord() : "");
-            etCategory.setText(slangWord.getCategory() != null ? slangWord.getCategory() : "");
+            // Set Spinner selection based on current category
+            if (slangWord.getCategory() != null) {
+                String[] categories = getResources().getStringArray(R.array.category_options);
+                for (int i = 0; i < categories.length; i++) {
+                    if (categories[i].equals(slangWord.getCategory())) {
+                        spinnerCategory.setSelection(i);
+                        break;
+                    }
+                }
+            }
             etMeaning.setText(slangWord.getMeaning() != null ? slangWord.getMeaning() : "");
             etOrigin.setText(slangWord.getOrigin() != null ? slangWord.getOrigin() : "");
             etExample.setText(slangWord.getExample() != null ? slangWord.getExample() : "");
@@ -65,7 +76,7 @@ public class UpdateSlangWordFragment extends Fragment {
 
     private void saveUpdatedWord() {
         String word = etWord.getText().toString().trim();
-        String category = etCategory.getText().toString().trim();
+        String category = spinnerCategory.getSelectedItem() != null ? spinnerCategory.getSelectedItem().toString() : "";
         String meaning = etMeaning.getText().toString().trim();
         String origin = etOrigin.getText().toString().trim();
         String example = etExample.getText().toString().trim();
