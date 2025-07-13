@@ -69,7 +69,6 @@ public class AccountDetailFragment extends Fragment {
 
         String newStatus = account.getStatus().equals("active") ? "deactive" : "active";
         DocumentReference docRef = firestore.collection("accounts").document(account.getId());
-        Log.d("AccountDetail", "Updating document ID: " + account.getId());
 
         // Check if document exists before updating
         docRef.get().addOnCompleteListener(task -> {
