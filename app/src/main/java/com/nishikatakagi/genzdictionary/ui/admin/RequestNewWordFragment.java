@@ -39,7 +39,6 @@ public class RequestNewWordFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_request_new_word, container, false);
-        Toast.makeText(getContext(), "Đã tải RequestNewWordFragment", Toast.LENGTH_SHORT).show();
 
         // Bind views
         rvWordRequests = view.findViewById(R.id.rv_word_requests);
@@ -67,7 +66,6 @@ public class RequestNewWordFragment extends Fragment {
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         WordRequest wordRequest = document.toObject(WordRequest.class);
                         wordRequestList.add(wordRequest);
-                        Log.d("RequestNewWordFragment", "Word: " + wordRequest.getWord() + ", ID: " + wordRequest.getSlangWordId());
                     }
                     adapter.notifyDataSetChanged();
                     tvEmptyState.setVisibility(wordRequestList.isEmpty() ? View.VISIBLE : View.GONE);

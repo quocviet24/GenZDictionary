@@ -18,6 +18,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.Timestamp;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -91,6 +92,9 @@ public class RegisterActivity extends AppCompatActivity {
         account.put("username", fullName);
         account.put("email", email);
         account.put("password", password);
+        account.put("role", "user");
+        account.put("status", "active");
+        account.put("createAt", Timestamp.now());
 
         firestore.collection("accounts")
                 .whereEqualTo("email", email)

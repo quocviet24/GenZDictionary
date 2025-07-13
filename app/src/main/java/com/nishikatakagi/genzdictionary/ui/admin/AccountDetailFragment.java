@@ -18,6 +18,9 @@ import com.google.firebase.firestore.SetOptions;
 import com.nishikatakagi.genzdictionary.R;
 import com.nishikatakagi.genzdictionary.models.Account;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 public class AccountDetailFragment extends Fragment {
 
     private TextView tvEmail, tvUsername, tvPassword, tvStatus, tvCreatedAt;
@@ -44,7 +47,12 @@ public class AccountDetailFragment extends Fragment {
             tvUsername.setText("Username: " + account.getUsername());
             tvPassword.setText("Password: " + account.getPassword());
             tvStatus.setText("Status: " + account.getStatus());
-            tvCreatedAt.setText("Created At: " + (account.getCreatedAt() != null ? account.getCreatedAt().toDate().toString() : "N/A"));
+            if (account.getCreatedAt() != null) {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
+                tvCreatedAt.setText("Created At: " + sdf.format(account.getCreatedAt().toDate()));
+            } else {
+                tvCreatedAt.setText("Created At: Không có dữ liệu");
+            }
             btnToggleStatus.setText(account.getStatus().equals("active") ? "Tạm ngừng hoạt động" : "Kích hoạt");
         }
 

@@ -87,7 +87,7 @@ public class ClientRequestFragment extends Fragment {
         String date = dateFormat.format(new Date());
 
         // Get username from SharedPreferences
-        String createdBy = sharedPreferences.getString("username", "unknown");
+        String createdBy = sharedPreferences.getString("email", "unknown");
 
         // Generate random UUID for slangWord
         String slangWordId = UUID.randomUUID().toString();

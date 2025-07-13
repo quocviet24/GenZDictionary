@@ -11,6 +11,7 @@ public class Account implements Serializable {
     private String password;
     private String status;
     private Timestamp createdAt;
+    private String role;
 
     public Account() {}
 
@@ -21,6 +22,14 @@ public class Account implements Serializable {
         this.password = password;
         this.status = status;
         this.createdAt = createdAt;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getId() {
