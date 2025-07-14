@@ -1,0 +1,10 @@
+<resources>
+    <!-- Dark theme -->
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/primary_color</item>
+        <item name="colorPrimaryDark">@color/primary_color</item>
+        <item name="colorAccent">@color/primary_color</item>
+        <item name="android:background">@android:color/black</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+</resources>

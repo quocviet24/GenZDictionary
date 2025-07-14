@@ -67,6 +67,7 @@ public class AccountDetailFragment extends Fragment {
             return;
         }
 
+
         String newStatus = account.getStatus().equals("active") ? "deactive" : "active";
         DocumentReference docRef = firestore.collection("accounts").document(account.getId());
 
